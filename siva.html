@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siva Teja Project - Landing Page</title>
+  <style>
+    /* Reset Styles */
+    body, h1, form, input, button, footer {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body Styling */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #6e8efb, #a777e3, #f2994a);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Form Container */
+    .form-container {
+      width: 400px;
+      background: linear-gradient(145deg, #ffffff, #f7f6f6);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Title */
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #4a47a3;
+    }
+
+    .brand-name {
+      font-size: 1.3em;
+      color: #ff5722;
+      text-align: center;
+      margin-bottom: 15px;
+      animation: slideDown 1.5s ease-in-out;
+    }
+
+    /* Form Elements */
+    form label {
+      display: block;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      color: #4a47a3;
+    }
+
+    form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9em;
+      transition: border-color 0.3s ease;
+    }
+
+    form input:focus {
+      border-color: #ff5722;
+      outline: none;
+    }
+
+    /* Button Styling */
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #6e8efb, #ff5722);
+      color: #fff;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #4a47a3;
+      transform: scale(1.02);
+    }
+
+    /* Success Message */
+    .success-message {
+      font-size: 0.9em;
+      color: green;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+    }
+
+    /* Footer Styling */
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.8em;
+      color: #fff;
+    }
+
+    footer img {
+      height: 25px;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 500px) {
+      .form-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1 class="brand-name">Siva Teja Project</h1>
+    <h1>Join Our Community</h1>
+    <form id="landingForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+      
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+      
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" pattern="[0-9]{10}" required>
+      
+      <button type="submit">Submit</button>
+      <div class="success-message" id="successMessage">Thank you! Your details have been submitted.</div>
+    </form>
+  </div>
+
+  <!-- Footer with AWS Branding -->
+  <footer>
+    Powered by <strong>AWS</strong> 
+    <img src="https://d1.awsstatic.com/logos/aws-logo-lockups/powered-by-aws/PB_AWS_logo_RGB

@@ -1,0 +1,280 @@
+Task 1: Launch an ec2 instance-1 in “ap-south-1a” with only “root” volume.
+-> Create a new volume in “ap-south-1a” and atach it to your ec2 instance and mount it,
+-> Write some data into it.
+Launch another ec2 instance-2 in “ap-south-1a”,
+-> Detach additional volume from Instance-1
+-> attach it to Instance-2, verify the data status. (edited) 
+
+
+Task 1: EC2 Instance and Volume Management
+Launch an EC2 instance in the ap-south-1a Availability Zone (AZ).
+Create a new EBS volume with a size of 1 GB in the ap-south-1a AZ.
+Attach the volume to the EC2 instance and make it available at the operating system level.
+Write some data to the volume.
+Using the AWS Management Console, increase the volume size to 2 GB.
+Reflect the new size (2 GB) at the operating system level.
+Write additional data to confirm the changes.
+
+Task 2: Sharing EBS Volume Data Across Instances
+Launch another EC2 instance in the ap-south-2a AZ.
+Transfer the data from the 2 GB volume (attached to the instance in ap-south-1a) to the newly launched EC2 instance in ap-south-2a.
+Ensure the volume is made available and accessible from the 1b instance in the new AZ.
+
+Task 3: Learn Amazon DLM Use Cases
+Read the AWS blog article: https://aws.amazon.com/blogs/storage/automating-amazon-ebs-snapshot-and-ami-management-using-amazon-dlm/
+Understand the scenarios and use cases for Amazon Data Lifecycle Manager (DLM).
+
+
+
+Task 1: Linux EC2 Instance Setup with Web Server and Custom Configuration
+Launch a Linux EC2 Instance:
+Select the appropriate AMI and instance type.
+Configure security group rules to allow HTTP/HTTPS traffic.
+Web Server Setup:
+Install and configure a web server (e.g., Apache or Nginx).
+Add custom webpages and verify their accessibility via the public IP.
+Volume Association:
+Create a 2GB EBS volume.
+Attach the volume to the instance.
+Format, mount, and configure it for permanent mounting.
+Golden AMI Creation:
+Create an AMI of the configured instance.
+Test Golden AMI:
+Launch a new instance from the created AMI.
+Verify the web server and custom configurations are intact.
+
+
+
+Task 2: Windows EC2 Instance Customization and Testing
+Launch a Windows EC2 Instance:
+Select the appropriate AMI and instance type.
+Configure security group rules to allow RDP traffic.
+Connect to the Instance:
+Retrieve and decrypt the administrator password.
+Connect using an RDP client.
+Perform Customizations:
+Change the administrator password.
+Change the desktop wallpaper.
+Install PuTTY software.
+Install IIS and configure a custom webpage.
+Golden AMI Creation:
+Stop the instance and create an AMI.
+Test Golden AMI:
+Launch a new instance from the created AMI.
+Verify the customizations are preserved.
+
+
+Task 3: Setup Password Authentication for EC2-User
+Follow the steps in the provided guide:
+Enable password authentication in the SSH configuration file.
+Restart the SSH service.
+Set a password for the ec2-user.
+Verify that password authentication works as expected.
+
+
+
+Task 4: What is “telnet” command, How to use telnet command to verify port status of an ec2 instance.
+** make sure your Security group inbound is opened with port 80 before starting this task.
+Install telnet client in your laptop
+Launch an ec2 instance and try to telnet on port 80 before installing nginx
+Now, Install nginx in ec2 instance and run telnet test on port 80 and observe output.
+
+
+(jan 19)
+
+Task1 : Simulate high CPU load on an EC2 instance using the stress command.
+Configure CloudWatch alarms to monitor the instance’s performance, and automate actions (stop the instance when load is more than 70% for 5 minutes) based on the alarm. Notifications should also be sent when the alarm triggers.
+Task 2 : Use httpd and Nodejs scripts with Amazon Linux 2023 and test the userdata option.
+Task 3 : Use timezone script with Windows Server 2022 base OS and test the userdata option.
+Task 4 : Observe the cloudwatch automatic dashboards.
+
+
+
+
+
+
+sk: Application Load Balancer with Multiple Target Groups
+Objective:
+Create an Application Load Balancer (ALB) to deliver multiple applications using separate target groups on port 80 and port 8080.
+Requirements:
+Launch EC2 Instances:
+Launch two EC2 instances, install and configure Apache web server to serve content on port 80, and register them to Target Group A.
+Launch one EC2 instance, configure it to serve content on port 8080, and register it to Target Group B.
+Create an Application Load Balancer:
+Configure the ALB to route traffic based on port numbers to the corresponding target groups.
+Ensure the ALB has appropriate security group rules to allow HTTP traffic on both ports.
+Target Group Configuration:
+Target Group A should listen on port 80 and forward requests to the two Apache instances.
+Target Group B should listen on port 8080 and forward requests to the single instance.
+Testing:
+Access the ALB DNS name via a web browser and confirm that both applications are accessible via:
+http://<ALB-DNS> → Should serve content from the instances in Target Group A.
+http://<ALB-DNS>:8080 → Should serve content from the instance in Target Group B.
+Complete the task and verify that the applications are accessible via the ALB with the correct routing configurations.
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+ask 1: Configure Pipeline Mechanism Between EC2 Instances and ELB
+Objective:
+Set up a load balancer to serve traffic only through the ELB, ensuring direct instance access is restricted.
+Requirements:
+Security Group Configuration:
+Modify the EC2 instance security group to allow port 80 traffic only from the ELB security group.
+Access Testing:
+Verify that accessing the instance directly via its IP does not serve the webpage.
+Ensure that accessing the application via the ELB DNS name works correctly.
+
+
+Task 2: Create an Auto Scaling Group (ASG) and Set Desired Count
+Objective:
+Deploy an Auto Scaling Group with a defined desired count of instances and verify its functionality.
+Requirements:
+Auto Scaling Group Setup:
+Create an ASG and set the desired capacity to 2 instances.
+Verification:
+Confirm that two instances are launched and running as expected.
+Cleanup:
+Ensure the Auto Scaling Group is deleted after testing to avoid unnecessary costs.
+
+
+
+
+Task : Create EFS and Mount it to multiple ec2 instances (Launch Instance 1 in ap-south-1a and instance 2 in ap-south-1b).
+--> Create a directory in both the ec2 instances.
+--> Mount EFS and create somedata and verify data from both the servers.
+Task : Create EFS and Mount it to multiple ec2 instances (Launch Instance 1 in ap-south-1a and instance 2 in ap-south-1b).
+--> make both the ec2 instances as webservers by installing httpd/nginx.
+--> Mount efs to /var/www/html/ directory in both the ec2 instances.
+--> Create some web content (index.html) and verify data from both the servers IP Address.
+==> Make sure you follow pipeline mechanism.
+Task : Launch an ec2 instance, connect to it. Install httpd in your ec2 instance.. Mount EFS to /var/www/html/ and create index.html...
+==> make the mount persistant.
+==> Now Stop the ec2 instance and create a GOLDENAMI..
+==> Configure ASG with this GOLDENAMI..
+COnnect to any of the ec2 instance, modify the content.. this modification should reflect in all instance..
+
+
+
+
+
+
+Task 1: Configure EventBridge to Stop an EC2 Instance at a Specific Time (9:15 AM)
+Task 2: Configure to Stop an EC2 Instance After 5 Minutes and Trigger a Custom Email Notification (use input transformer).
+Task 3: Send an SNS Notification When an IAM Policy is Modified. Use below custom EventPattern to send notification via SNS. (Note: i’ve not tested it - Let me know the status)
+{
+  “source”: [“aws.iam”],
+  “detail-type”: [“AWS API Call via CloudTrail”],
+  “detail”: {
+    “eventSource”: [“iam.amazonaws.com”],
+    “eventName”: [
+      “CreatePolicy”,
+      “DeletePolicy”,
+      “UpdatePolicy”
+    ]
+  }
+}
+Task 4: Get a notification when anyone logged in to aws account. (Note: i’ve not tested it - Let me know the status)
+{
+  “source”: [“aws.signin”],
+  “detail-type”: [“AWS Console Sign In via CloudTrail”],
+  “detail”: {
+    “eventName”: [“ConsoleLogin”],
+    “additionalEventData”: {
+      “MFAUsed”: [“Yes”, “No”]
+    }
+  }
+} (edited) 
+
+
+
+
+
+
+Task 1: Recover a Windows EC2 Instance Administrator Password Without Key Pair
+Objective: Recover the administrator password of a Windows EC2 instance if the key pair is lost using AWS Systems Manager Automation.
+Instructions:
+Navigate to the AWS Systems Manager Console.
+Choose Run Command from the left panel.
+Click Command Document and search for the AWSSupport-RunEC2RescueForWindowsTool document.
+Select your target Windows EC2 instance.
+Run the automation document and follow the instructions to reset the administrator password.
+Retrieve the new password and log in to the instance via RDP.
+
+
+Task 2: Make a Linux EC2 Instance a Web Server Without Logging into OS
+Objective: Configure an Apache web server on an EC2 instance at launch using user data, without manual SSH access.
+Instructions:
+Launch an EC2 instance with Amazon Linux 2.
+Attach a user data script during instance creation to install and configure Apache:#!/bin/bash
+yum install -y httpd
+systemctl start httpd
+systemctl enable httpd
+echo “Hello from $(hostname)” > /var/www/html/index.html
+Once the instance is running, access the public IP in a browser to verify the web server.
+
+
+
+Task 3: Change the Timezone of a Windows EC2 Instance Using SSM Run Command
+Objective: Use AWS Systems Manager Run Command to change the timezone of a Windows EC2 instance.
+Instructions:
+Ensure the instance has an SSM Agent installed and the necessary IAM role attached.
+Navigate to the AWS Systems Manager Console.
+Go to Run Command → Run a command.
+Choose the document AWS-RunPowerShellScript.
+Select your Windows EC2 instance.
+Enter the following command in the script section:tzutil /s “India Standard Time”
+Click Run Command and verify the timezone change inside the instance.
+
+
+
+Task 4: Retrieve System Information from an EC2 Instance
+Objective: Use AWS Systems Manager Run Command to check system details like OS version, hostname, and uptime.
+Instructions:
+Open AWS Systems Manager Console → Run Command.
+Choose the AWS-RunShellScript document for Linux or AWS-RunPowerShellScript for Windows.
+Select a target EC2 instance.
+Enter the following commands:
+For Linux: uname -a
+cat /etc/os-release
+uptime
+Run the command and review the output.
+
+
+
+Task 5: Change the Hostname of an EC2 Instance
+Objective: Change the hostname of an EC2 instance without logging in.
+Instructions:
+For Linux: hostnamectl set-hostname NewHostname
+For Windows: Rename-Computer -NewName “NewHostname” -Force -Restart
+
+
+
+Task 6: Fetch Public and Private IP Addresses of an Instance
+Objective: Use Run Command to retrieve network details of an instance.
+Instructions:
+For Linux: curl http://169.254.169.254/latest/meta-data/public-ipv4
+curl http://169.254.169.254/latest/meta-data/local-ipv4
+For Windows: Invoke-WebRequest -Uri http://169.254.169.254/latest/meta-data/public-ipv4
+Invoke-WebRequest -Uri http://169.254.169.254/latest/meta-data/local-ipv4
+
+
+
+
+Task 7: Reboot an EC2 Instance Using Run Command
+Objective: Remotely reboot an EC2 instance using Run Command.
+Instructions:
+For Linux: reboot
+For Windows: Restart-Computer -Force
+
+
+
+
+
+
+
+

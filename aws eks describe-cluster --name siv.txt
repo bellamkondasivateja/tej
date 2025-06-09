@@ -1,0 +1,27 @@
+aws eks describe-cluster --name sivateja --region ap-south-2 --query "cluster.identity.oidc.issuer" --output text
+
+
+eksctl utils associate-iam-oidc-provider \
+  --region ap-south-2 \
+  --cluster sivateja \
+  --approve
+
+
+
+
+
+eksctl create cluster \
+  --name sivateja \
+  --version 1.31 \
+  --region ap-south-2 \
+  --zones ap-south-2a,ap-south-2b \
+  --nodegroup-name bstname \
+  --node-type t3.small \
+  --nodes 2 \
+  --managed
+
+
+
+
+eksctl delete cluster --name sivateja --region ap-south-2
+

@@ -1,0 +1,93 @@
+import json
+import boto3
+import csv
+import io
+from datetime import datetime, timezone, timedelta
+
+# Initialize IAM and S3 clients
+iam_client = boto3.client('iam')
+s3_client = boto3.client('s3')
+
+# Specify your target S3 bucket name
+TARGET_BUCKET_NAME = 'task-7'
+CSV_FILE_NAME = 'inactive_users.csv'
+
+def lambda_handler(event, context):
+    # Define the inactivity threshold (24 hours)
+    threshold_days = 1  # 24 hours
+    threshold_date = datetime.now(timezone.utc) - timedelta(days=threshold_days)  # Calculate threshold date
+    
+    # List all IAM users
+    users = iam_client.list_users()
+    
+    inactive_users = []
+    
+    # Loop through each user and get their LastUsed information
+    for user in users['Users']:
+        username = user['UserName']
+        
+        print(f"Checking user: {username}")
+        
+        # Retrieve the access keys for the user
+        try:
+            access_keys = iam_client.list_access_keys(UserName=username)
+            print(f"User {username} has {len(access_keys['AccessKeyMetadata'])} access keys.")
+            
+            if not access_keys['AccessKeyMetadata']:
+                # If the user has no access keys, consider inactive
+                inactive_users.append({
+                    'UserName': username,
+                    'LastUsed': 'No access keys'
+                })
+                continue  # Skip to the next user
+            
+            for key in access_keys['AccessKeyMetadata']:
+                access_key_id = key['AccessKeyId']
+                
+                # Get the last used date for the access key
+                response = iam_client.get_access_key_last_used(AccessKeyId=access_key_id)
+                last_used = response['AccessKeyLastUsed'].get('LastUsedDate')
+                
+                if last_used:
+                    # Check if the access key was used within the last 24 hours
+                    if last_used >= threshold_date:
+                        print(f"Access key {access_key_id} for user {username} was last used on {last_used}")
+                        break  # If any key was used in the last 24 hours, consider the user active
+                else:
+                    print(f"Access key {access_key_id} for user {username} has never been used.")
+            
+            else:
+                # If no key was used in the last 24 hours, add user to inactive list
+                inactive_users.append({
+                    'UserName': username,
+                    'LastUsed': 'No access in the last 24 hours'
+                })
+        
+        except Exception as e:
+            print(f"Error checking user {username}: {e}")
+    
+    # Generate CSV content
+    csv_file = io.StringIO()
+    csv_writer = csv.DictWriter(csv_file, fieldnames=['UserName', 'LastUsed'])
+    csv_writer.writeheader()
+    csv_writer.writerows(inactive_users)
+    
+    # Move file pointer to the beginning of the file
+    csv_file.seek(0)
+    
+    # Upload the CSV to S3
+    try:
+        s3_client.put_object(
+            Bucket=TARGET_BUCKET_NAME,
+            Key=CSV_FILE_NAME,
+            Body=csv_file.getvalue()
+        )
+        print(f"CSV file successfully uploaded to S3 bucket {TARGET_BUCKET_NAME} with the name {CSV_FILE_NAME}.")
+    except Exception as e:
+        print(f"Error uploading CSV file to S3: {e}")
+    
+    # Return the result
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'message': 'CSV file uploaded successfully to S3', 'inactive_users_count': len(inactive_users)})
+    }

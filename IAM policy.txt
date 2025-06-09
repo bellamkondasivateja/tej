@@ -1,0 +1,103 @@
+### **Module 1: AWS Identity and Access Management (IAM) Tasks**
+
+
+#### **Task 1: AWS Account Security Basics**
+1. **Create an AWS Account**: Set up a new AWS account.
+2. **Enable MFA for the Root User**: Protect the root user by enabling Multi-Factor Authentication (MFA). Use a virtual MFA device like Google Authenticator.
+3. **Set Account Alias and Custom Password Policy**: 
+   - Create an account alias for easier identification (e.g., `Avinash-demo`).
+   - Configure a custom password policy:
+     - Minimum password length: 8 characters.
+     - Require at least one uppercase letter, one number, and one special character.
+     - Disallow password reuse for the last 3 passwords.
+
+---
+
+#### **Task 2: Create a Basic IAM User and Test Permissions**
+1. Create an IAM user with the name `S3User` and assign the **AmazonS3FullAccess** managed policy.
+2. Use the AWS Management Console to log in as `S3User`.
+3. Verify the access:
+   - Create a new S3 bucket with a unique name.
+   - Upload a test file to the bucket.
+
+---
+
+#### **Task 3: IAM User with Limited Permissions**
+1. Create an IAM user named `IAM-Admin` and assign the **IAMFullAccess** managed policy.
+2. Log in as `IAM-Admin` and test the access:
+   - Create another IAM user named `TestUser`.
+   - Assign `TestUser` the **ReadOnlyAccess** managed policy.
+
+---
+
+#### **Task 4: Test Administrator Privileges**
+1. Create an IAM user named `AdminUser` and assign the **AdministratorAccess** policy.
+2. Log in as `AdminUser` and perform these actions:
+   - Create a new IAM user with custom permissions.
+   - Create another S3 bucket.
+   - Verify the account information (e.g., billing details) and test if access is "allowed or denied".
+
+---
+
+#### **Task 5: Enable Billing Access for an IAM User**
+1. Observe that `AdminUser` (Task-4 User) does not have billing access by default.
+2. Enable billing access for `AdminUser`. 
+- Do R&D and enable billing access for IAM user.
+
+---
+
+#### **Task 6: Group Management**
+1. Create an IAM group named Developers.
+	- Attach the AmazonS3ReadOnlyAccess policy to the group.
+2. Add two IAM users (DevUser1 and DevUser2) to the Developers group.
+	- Log in as DevUser1 and verify:
+	- Access to view S3 buckets is allowed.
+	- Attempting to upload a file results in an error due to insufficient permissions.
+
+---
+
+#### **Task 7: Fine-Grained Permissions for S3**
+1. Create an IAM user named S3RestrictedUser.
+2. Attach a customer-managed policy to allow:
+	. Access to only a specific S3 bucket (e.g., Yourname-24-12-2024).
+	. Allow Only GetObject and ListBucket, ListAllMyBuckets actions from the Policy.
+3. Log in as S3RestrictedUser and verify:
+	. Attempt to access other buckets results in access denied.
+	. Downloading files from my-restricted-bucket is allowed.
+
+---
+
+### **Task 8: Budget Viewer User**
+1. Create an IAM user named BudgetViewer.
+	- Attach the AWS-managed policy AWSBillingReadOnlyAccess.
+2. Log in as BudgetViewer and verify:
+	- Access to billing information (e.g., budgets, cost explorer) is allowed.
+	- Access to other AWS services is denied.
+
+---
+
+#### **Task 9: Create a Custom Managed Policy**
+1. Create a customer-managed policy named `DenyS3Access` to **deny all actions on S3**.
+2. Attach the `DenyS3Access` policy to `AdminUser` (Task-4 User).
+3. Log in as `AdminUser` and test:
+   - Attempt to create an S3 bucket.
+   - Note the denied access and share the output.
+
+---
+
+#### **Task 10: Policy with IP Address Conditions**
+1. Create a policy to allow **AmazonS3FullAccess**, but restrict it to a specific IP address or network.
+   - Use your own network IP address: `i.e; x.x.x.x/32`. You can get your network IP by visiting websites i.e; http://checkip.amazonaws.com/ or https://whatismyipaddress.com/
+   - Add a condition to the policy to allow access only when the request originates from this IP address.
+2. Attach the policy to an IAM user and test:
+   - Log in from a different IP address and attempt to access S3.
+   - Log in from the allowed IP and perform S3 actions.
+
+---
+
+#### **Task 11: Allow Users to enable MFA himself**
+1. Create a policy to allow an IAM uyser to enable MFA in your AWS account.
+2. Test the behavior:
+   - Create an IAM user with Name "MFA-Task" attach Just "S3FullAccess" policy, Login and try to enable MFA from "Security Credentials" option.
+   - Switch to IAM user who has permissions on IAM service. Create a Policy to enable MFA and attach to MFA-Task user.
+   - Verify if the MFA-Task user can enable/disable/sync MFA after the policy is attached
